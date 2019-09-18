@@ -20,6 +20,7 @@ import com.netflix.zuul.ZuulRunner;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -48,7 +49,6 @@ public class ZuulServlet extends HttpServlet {
 
     private static final long serialVersionUID = -3374242278843351500L;
     private ZuulRunner zuulRunner;
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -156,6 +156,8 @@ public class ZuulServlet extends HttpServlet {
         FilterProcessor processor;
         @Mock
         PrintWriter writer;
+        @Mock
+        ServletConfig servletConfig;
 
         @Before
         public void before() {
@@ -163,12 +165,12 @@ public class ZuulServlet extends HttpServlet {
         }
 
         @Test
-        public void testProcessZuulFilter() {
+        public void testProcessZuulFilter() throws ServletException {
 
             ZuulServlet zuulServlet = new ZuulServlet();
             zuulServlet = spy(zuulServlet);
             RequestContext context = spy(RequestContext.getCurrentContext());
-
+            zuulServlet.init(servletConfig);
 
             try {
                 FilterProcessor.setProcessor(processor);
